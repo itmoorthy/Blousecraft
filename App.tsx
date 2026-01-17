@@ -83,14 +83,14 @@ const App: React.FC = () => {
             {/* Input Section */}
             <div className="lg:col-span-4 space-y-6">
               <div className="bg-[#0F3D3E] p-6 sm:p-8 rounded-[2rem] shadow-2xl border-2 border-[#5EEAD4]/20">
-                <div className="flex items-center space-x-2 mb-6 text-[#5EEAD4]">
-                  <Calculator size={24} />
-                  <h2 className="text-sm font-black uppercase tracking-[0.2em]">Bust Entry</h2>
+                <div className="flex items-center space-x-2 mb-4 text-[#5EEAD4]">
+                  <Calculator size={20} />
+                  <h2 className="text-xs font-black uppercase tracking-[0.2em]">Bust Entry</h2>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <div>
-                    <label htmlFor="bustSize" className="block text-[11px] font-extrabold text-[#5EEAD4] uppercase tracking-widest mb-3">
+                    <label htmlFor="bustSize" className="block text-[10px] font-extrabold text-[#5EEAD4] uppercase tracking-widest mb-2">
                       Bust Size (B)
                     </label>
                     <div className="relative group">
@@ -101,20 +101,12 @@ const App: React.FC = () => {
                         value={bustSize}
                         onChange={handleInputChange}
                         placeholder="40"
-                        className="block w-full px-6 py-5 bg-[#042F2E] border-2 border-[#5EEAD4]/30 rounded-3xl text-4xl font-black focus:ring-8 focus:ring-[#5EEAD4]/20 focus:border-[#5EEAD4] outline-none transition-all placeholder:text-[#99F6E4]/10 text-[#E6FFFA]"
+                        className="block w-full px-5 py-4 bg-[#042F2E] border-2 border-[#5EEAD4]/30 rounded-2xl text-4xl font-black focus:ring-4 focus:ring-[#5EEAD4]/20 focus:border-[#5EEAD4] outline-none transition-all placeholder:text-[#99F6E4]/10 text-[#E6FFFA]"
                       />
-                      <div className="absolute right-6 top-1/2 -translate-y-1/2 text-[#5EEAD4]/40 font-black text-xl">
+                      <div className="absolute right-5 top-1/2 -translate-y-1/2 text-[#5EEAD4]/40 font-black text-lg">
                         in
                       </div>
                     </div>
-                  </div>
-
-                  <div className="p-5 bg-[#022C22] rounded-3xl flex items-center justify-between border-2 border-[#5EEAD4]/20">
-                    <div>
-                      <p className="text-[10px] font-black text-[#5EEAD4] uppercase tracking-wider">Fit Profile</p>
-                      <p className="text-[#E6FFFA] font-black italic text-lg">Perfect Fit 1.0</p>
-                    </div>
-                    <CheckCircle2 className="text-[#5EEAD4]" size={28} />
                   </div>
                 </div>
               </div>
