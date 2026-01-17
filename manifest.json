@@ -1,0 +1,19 @@
+
+{
+  "name": "BlouseCraft Tailor Pro",
+  "short_name": "BlouseCraft",
+  "description": "Professional Indian Blouse Stitching Calculator",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#90F5C8",
+  "theme_color": "#042F2E",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3063/3063822.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
