@@ -19,33 +19,36 @@ import {
   ArrowLeftRight,
   ArrowDown,
   Download,
-  AlertCircle
+  AlertCircle,
+  Smartphone,
+  MoreVertical
 } from 'lucide-react';
 
 const App: React.FC = () => {
   const [bustSize, setBustSize] = useState<string>('40');
   const [activeTab, setActiveTab] = useState<'calculator' | 'formulas'>('calculator');
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstallGuide, setShowInstallGuide] = useState(false);
 
   useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      console.log('Install prompt is ready');
+      console.log('PWA: Install prompt captured');
     };
     window.addEventListener('beforeinstallprompt', handler);
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) {
-      alert("To install: Open the SHARED link in Chrome, tap 3-dots, and select 'Install app'.");
-      return;
-    }
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      setDeferredPrompt(null);
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+      }
+    } else {
+      setShowInstallGuide(true);
     }
   };
 
@@ -62,7 +65,43 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#90F5C8] text-[#042F2E] pb-10 font-['Inter']">
+    <div className="min-h-screen bg-[#90F5C8] text-[#042F2E] pb-10 font-['Inter'] selection:bg-[#042F2E] selection:text-[#90F5C8]">
+      {/* Installation Guide Modal */}
+      {showInstallGuide && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-[#0F3D3E] text-white w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl border-2 border-[#5EEAD4]/20 animate-in fade-in zoom-in duration-200">
+            <div className="flex justify-between items-start mb-6">
+              <div className="bg-[#5EEAD4] p-3 rounded-2xl text-[#042F2E]">
+                <Smartphone size={24} />
+              </div>
+              <button onClick={() => setShowInstallGuide(false)} className="text-[#5EEAD4] opacity-50 hover:opacity-100 font-black text-xl px-2">✕</button>
+            </div>
+            <h3 className="text-xl font-black uppercase italic tracking-tighter mb-4 text-[#5EEAD4]">Install BlouseCraft</h3>
+            <p className="text-xs font-bold uppercase tracking-tight opacity-80 leading-relaxed mb-6">
+              The automatic "Install" button is waiting for browser permission. You can install manually:
+            </p>
+            <div className="space-y-4">
+              <div className="flex items-center space-x-4 bg-[#042F2E] p-4 rounded-2xl border border-white/10">
+                <div className="flex flex-col items-center">
+                  <MoreVertical size={20} className="text-[#5EEAD4]" />
+                </div>
+                <p className="text-[10px] font-black uppercase tracking-widest">1. Tap 3 dots in Chrome</p>
+              </div>
+              <div className="flex items-center space-x-4 bg-[#042F2E] p-4 rounded-2xl border border-white/10">
+                <Download size={20} className="text-[#5EEAD4]" />
+                <p className="text-[10px] font-black uppercase tracking-widest">2. Select "Install App"</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => setShowInstallGuide(false)}
+              className="w-full mt-8 py-4 bg-[#5EEAD4] text-[#042F2E] rounded-2xl font-black uppercase tracking-widest shadow-lg active:scale-95 transition-transform"
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Responsive Header */}
       <header className="bg-[#042F2E] border-b-4 border-[#0F3D3E] sticky top-0 z-30 shadow-lg">
         <div className="max-w-5xl mx-auto px-4 py-3 sm:py-0 sm:h-24 flex flex-col justify-center">
@@ -78,14 +117,14 @@ const App: React.FC = () => {
 
             <button 
               onClick={handleInstallClick}
-              className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all shadow-lg ${
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg active:scale-95 ${
                 deferredPrompt 
                 ? 'bg-[#5EEAD4] text-[#042F2E] animate-bounce' 
-                : 'bg-white/10 text-white/40 border border-white/10'
+                : 'bg-white/5 text-white/40 border border-white/10 hover:bg-white/10 hover:text-white'
               }`}
             >
               <Download size={14} />
-              <span>{deferredPrompt ? 'Get App' : 'App Ready'}</span>
+              <span>{deferredPrompt ? 'Install Now' : 'Save App'}</span>
             </button>
           </div>
 
@@ -259,17 +298,17 @@ const App: React.FC = () => {
             {/* Install Helper */}
             <div className="bg-[#7A1F2B] p-6 rounded-3xl border-2 border-white/20 shadow-xl text-white">
               <div className="flex items-center space-x-3 mb-3">
-                <AlertCircle size={20} />
-                <h3 className="font-black uppercase tracking-widest text-sm italic">Installation Pro-Tip</h3>
+                <Smartphone size={20} />
+                <h3 className="font-black uppercase tracking-widest text-sm italic">Accessing App</h3>
               </div>
               <p className="text-xs font-bold leading-relaxed opacity-90 uppercase tracking-tight">
-                To access this app like a real app on your phone:
+                To fix the "AI Studio" icon issue and get a proper BlouseCraft icon:
               </p>
               <ol className="mt-3 space-y-2 text-[10px] font-black uppercase tracking-wider list-decimal list-inside opacity-80">
-                <li>Use the SHARED link (not the editor URL)</li>
-                <li>Tap the 3 dots in Chrome</li>
-                <li>Select "Install App" or "Add to Home Screen"</li>
-                <li>This ensures the icon opens ONLY BlouseCraft.</li>
+                <li>You must use the <strong className="text-white">SHARED LINK</strong> (Share button in AI Studio).</li>
+                <li>In Chrome on mobile, tap the <strong className="text-white">3 dots</strong>.</li>
+                <li>Tap <strong className="text-white">"Install app"</strong> or <strong className="text-white">"Add to Home Screen"</strong>.</li>
+                <li>Open the app from your home screen. It will now work as a standalone calculator.</li>
               </ol>
             </div>
 
