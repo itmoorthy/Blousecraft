@@ -32,13 +32,9 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'calculator' | 'formulas'>('calculator');
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallGuide, setShowInstallGuide] = useState(false);
-  const [isInEditor, setIsInEditor] = useState(false);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    const isIframe = window.self !== window.top;
-    setIsInEditor(isIframe);
-
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -95,10 +91,10 @@ const App: React.FC = () => {
             <div className="space-y-4">
               <div className="p-4 bg-[#7A1F2B] rounded-2xl border border-white/20">
                 <p className="text-[10px] font-black uppercase tracking-widest flex items-center mb-1">
-                  <AlertCircle size={14} className="mr-2" /> Action Required
+                  <AlertCircle size={14} className="mr-2" /> Installation Steps
                 </p>
                 <p className="text-[11px] font-bold leading-tight opacity-90 uppercase">
-                  You cannot install from this editor. You must use the Share Link.
+                  Follow these steps to install BlouseCraft as a standalone app on your phone.
                 </p>
               </div>
 
@@ -135,17 +131,7 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Editor Warning Banner */}
-      {isInEditor && (
-        <div className="bg-[#7A1F2B] text-white py-2.5 px-4 text-center sticky top-0 z-[40] shadow-xl">
-          <button onClick={() => setShowInstallGuide(true)} className="text-[9px] font-black uppercase tracking-[0.2em] flex items-center justify-center w-full">
-            <ShieldAlert size={14} className="mr-2 animate-pulse" />
-            Editor Mode: Installation guide inside
-          </button>
-        </div>
-      )}
-
-      <header className={`bg-[#042F2E] border-b-4 border-[#0F3D3E] sticky top-0 z-30 shadow-lg ${isInEditor ? '' : 'sm:top-0'}`}>
+      <header className="bg-[#042F2E] border-b-4 border-[#0F3D3E] sticky top-0 z-30 shadow-lg">
         <div className="max-w-5xl mx-auto px-4 py-4 sm:h-24 flex flex-col justify-center">
           <div className="flex items-center justify-between w-full mb-3 sm:mb-2">
             <div className="flex items-center space-x-3">
