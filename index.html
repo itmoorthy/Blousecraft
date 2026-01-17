@@ -18,10 +18,8 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #90F5C8;
-            /* Prevents pull-to-refresh on mobile which can be annoying in apps */
             overscroll-behavior-y: contain;
         }
-        /* Custom scrollbar for mobile */
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -43,5 +41,12 @@
 </head>
 <body>
     <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW reg failed:', err));
+        });
+      }
+    </script>
 </body>
 </html>

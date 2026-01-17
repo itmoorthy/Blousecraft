@@ -18,7 +18,8 @@ import {
   Target,
   ArrowLeftRight,
   ArrowDown,
-  Download
+  Download,
+  AlertCircle
 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -26,18 +27,21 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'calculator' | 'formulas'>('calculator');
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
-  // Handle PWA installation prompt
   useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
+      console.log('Install prompt is ready');
     };
     window.addEventListener('beforeinstallprompt', handler);
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      alert("To install: Open the SHARED link in Chrome, tap 3-dots, and select 'Install app'.");
+      return;
+    }
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     if (outcome === 'accepted') {
@@ -63,7 +67,6 @@ const App: React.FC = () => {
       <header className="bg-[#042F2E] border-b-4 border-[#0F3D3E] sticky top-0 z-30 shadow-lg">
         <div className="max-w-5xl mx-auto px-4 py-3 sm:py-0 sm:h-24 flex flex-col justify-center">
           <div className="flex items-center justify-between w-full mb-3 sm:mb-2">
-            {/* Logo Section */}
             <div className="flex items-center space-x-3">
               <div className="bg-[#90F5C8] p-1.5 sm:p-2 rounded-xl text-[#042F2E] shadow-inner">
                 <Scissors size={18} className="sm:w-6 sm:h-6" />
@@ -73,19 +76,19 @@ const App: React.FC = () => {
               </h1>
             </div>
 
-            {/* Install Button - Only shows if app is installable */}
-            {deferredPrompt && (
-              <button 
-                onClick={handleInstallClick}
-                className="flex items-center space-x-2 bg-[#5EEAD4] text-[#042F2E] px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest animate-bounce shadow-lg"
-              >
-                <Download size={14} />
-                <span>Get App</span>
-              </button>
-            )}
+            <button 
+              onClick={handleInstallClick}
+              className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all shadow-lg ${
+                deferredPrompt 
+                ? 'bg-[#5EEAD4] text-[#042F2E] animate-bounce' 
+                : 'bg-white/10 text-white/40 border border-white/10'
+              }`}
+            >
+              <Download size={14} />
+              <span>{deferredPrompt ? 'Get App' : 'App Ready'}</span>
+            </button>
           </div>
 
-          {/* Navigation Section */}
           <nav className="flex items-center w-full bg-[#022C22]/50 p-1 rounded-2xl sm:max-w-xs">
             <button 
               onClick={() => setActiveTab('calculator')}
@@ -164,7 +167,6 @@ const App: React.FC = () => {
 
               {measurements.bustSize > 0 ? (
                 <div className="space-y-6">
-                  {/* Primary Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <MeasurementCard 
                       label="Armhole Curve" 
@@ -204,7 +206,6 @@ const App: React.FC = () => {
                     />
                   </div>
 
-                  {/* Detailing Section */}
                   <div className="pt-6 border-t-2 border-[#0F3D3E]/20">
                     <h3 className="text-[10px] font-black text-[#0F3D3E] uppercase tracking-[0.2em] mb-4">Cutting & Finishing</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -254,8 +255,24 @@ const App: React.FC = () => {
             </div>
           </div>
         ) : (
-          /* Formulas View */
           <div className="max-w-3xl mx-auto space-y-6">
+            {/* Install Helper */}
+            <div className="bg-[#7A1F2B] p-6 rounded-3xl border-2 border-white/20 shadow-xl text-white">
+              <div className="flex items-center space-x-3 mb-3">
+                <AlertCircle size={20} />
+                <h3 className="font-black uppercase tracking-widest text-sm italic">Installation Pro-Tip</h3>
+              </div>
+              <p className="text-xs font-bold leading-relaxed opacity-90 uppercase tracking-tight">
+                To access this app like a real app on your phone:
+              </p>
+              <ol className="mt-3 space-y-2 text-[10px] font-black uppercase tracking-wider list-decimal list-inside opacity-80">
+                <li>Use the SHARED link (not the editor URL)</li>
+                <li>Tap the 3 dots in Chrome</li>
+                <li>Select "Install App" or "Add to Home Screen"</li>
+                <li>This ensures the icon opens ONLY BlouseCraft.</li>
+              </ol>
+            </div>
+
             <div className="bg-[#0F3D3E] p-8 rounded-[2.5rem] shadow-2xl border-2 border-[#5EEAD4]/10">
               <h2 className="text-xl font-black mb-6 text-[#E6FFFA] italic uppercase tracking-tighter">Boutique Formula Set</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
