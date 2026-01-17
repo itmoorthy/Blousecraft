@@ -17,7 +17,7 @@ const roundToQuarter = (num: number): number => {
  * - NeckWidth = round((B / 18) + 0.5)
  * - Shoulder = round(B / 12)
  * - Apex_V = round(B / 4)
- * - Apex_H = round((B / 6) + 1)
+ * - Apex_H = round((B / 12) + 0.5)  <-- Updated for folded fabric (Half Span)
  * - Sleeve Length = round((B / 8) + 1)
  * - Dart Width = round(B / 24)
  */
@@ -51,6 +51,6 @@ export const calculateBlouseMeasurements = (bustSize: number): BlouseMeasurement
     dartSize: roundToQuarter(B / 24),
     seamMargin: 1.5,
     apexVertical: roundToQuarter(B / 4),
-    apexHorizontal: roundToQuarter((B / 6) + 1),
+    apexHorizontal: roundToQuarter((B / 12) + 0.5),
   };
 };
