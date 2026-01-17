@@ -13,7 +13,6 @@ import {
   Menu,
   Calculator,
   MoveHorizontal,
-  Shrink,
   ArrowLeftRight,
   ArrowDown,
   Download,
@@ -21,8 +20,7 @@ import {
   Smartphone,
   Copy,
   Check,
-  Share2,
-  Zap
+  Share2
 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -69,10 +67,8 @@ const App: React.FC = () => {
     }
   };
 
-  const isBalanced = measurements.totalShoulder === measurements.armhole;
-
   return (
-    <div className="min-h-screen bg-[#90F5C8] text-[#042F2E] pb-10 font-['Inter'] selection:bg-[#042F2E] selection:text-[#90F5C8]">
+    <div className="min-h-screen bg-[#d7ffed] text-[#042F2E] pb-10 font-['Inter'] selection:bg-[#042F2E] selection:text-[#d7ffed]">
       {/* Installation Guide Modal */}
       {showInstallGuide && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl">
@@ -110,14 +106,6 @@ const App: React.FC = () => {
                     </span>
                   </div>
                 </button>
-                <div className="flex items-center space-x-4 bg-[#042F2E] p-4 rounded-2xl border border-white/5 opacity-70">
-                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center font-black">2</div>
-                  <p className="text-[10px] font-black uppercase tracking-widest">Paste in NEW Chrome Tab</p>
-                </div>
-                <div className="flex items-center space-x-4 bg-[#042F2E] p-4 rounded-2xl border border-white/5 opacity-70">
-                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center font-black">3</div>
-                  <p className="text-[10px] font-black uppercase tracking-widest">Menu → Install App</p>
-                </div>
               </div>
             </div>
 
@@ -135,7 +123,7 @@ const App: React.FC = () => {
         <div className="max-w-5xl mx-auto px-4 py-4 sm:h-24 flex flex-col justify-center">
           <div className="flex items-center justify-between w-full mb-3 sm:mb-2">
             <div className="flex items-center space-x-3">
-              <div className="bg-[#90F5C8] p-2 rounded-xl text-[#042F2E]">
+              <div className="bg-[#d7ffed] p-2 rounded-xl text-[#042F2E]">
                 <Scissors size={20} />
               </div>
               <h1 className="text-xl sm:text-2xl font-black tracking-tighter uppercase italic text-[#E6FFFA]">
@@ -161,7 +149,7 @@ const App: React.FC = () => {
               onClick={() => setActiveTab('calculator')}
               className={`flex-1 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                 activeTab === 'calculator' 
-                ? 'bg-[#90F5C8] text-[#042F2E] shadow-lg' 
+                ? 'bg-[#d7ffed] text-[#042F2E] shadow-lg' 
                 : 'text-[#99F6E4]'
               }`}
             >
@@ -171,7 +159,7 @@ const App: React.FC = () => {
               onClick={() => setActiveTab('formulas')}
               className={`flex-1 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                 activeTab === 'formulas' 
-                ? 'bg-[#90F5C8] text-[#042F2E] shadow-lg' 
+                ? 'bg-[#d7ffed] text-[#042F2E] shadow-lg' 
                 : 'text-[#99F6E4]'
               }`}
             >
@@ -216,22 +204,14 @@ const App: React.FC = () => {
             <div className="lg:col-span-8">
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-2xl font-black text-[#042F2E] uppercase tracking-tighter italic">Stitching Guide</h2>
-                <div className={`flex items-center space-x-2 px-4 py-2 rounded-full shadow-lg border border-white/10 transition-colors ${isBalanced ? 'bg-green-600 text-white' : 'bg-amber-500 text-[#042F2E]'}`}>
-                  {isBalanced ? <CheckCircle2 size={14} /> : <Zap size={14} />}
-                  <span className="text-[10px] font-black uppercase tracking-widest">
-                    {isBalanced ? 'Balanced Fit' : 'Custom Tweak'}
-                  </span>
+                <div className="flex items-center space-x-2 bg-green-600 text-white px-5 py-2 rounded-full shadow-lg border border-white/10">
+                  <CheckCircle2 size={16} />
+                  <span className="text-[11px] font-black uppercase tracking-widest">Master Fit</span>
                 </div>
               </div>
 
               {measurements.bustSize > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <MeasurementCard 
-                    label="Total Shoulder Span" 
-                    value={measurements.totalShoulder} 
-                    icon={<Ruler size={20} />} 
-                    description="NW + SW"
-                  />
                   <MeasurementCard 
                     label="Armhole Size" 
                     value={measurements.armhole} 
@@ -249,6 +229,12 @@ const App: React.FC = () => {
                     value={measurements.neckWidth} 
                     icon={<Menu size={20} className="rotate-90" />} 
                     description="(B / 18) + 0.5"
+                  />
+                  <MeasurementCard 
+                    label="Total Shoulder Span" 
+                    value={measurements.totalShoulder} 
+                    icon={<Ruler size={20} />} 
+                    description="NW + SW"
                   />
                   <MeasurementCard 
                     label="Apex Span (Fold)" 
@@ -285,10 +271,10 @@ const App: React.FC = () => {
               <div className="mt-8 p-6 bg-[#042F2E] rounded-3xl border-l-4 border-[#7A1F2B] shadow-2xl">
                 <h4 className="text-[#5EEAD4] font-black text-[10px] uppercase tracking-widest mb-2 flex items-center">
                   <Info size={14} className="mr-2" />
-                  Master Tailor Relationship
+                  Pro Tip: The Master Balance
                 </h4>
                 <p className="text-[#E6FFFA] text-[10px] leading-relaxed font-bold uppercase tracking-tight">
-                  In this formula, your <span className="text-[#5EEAD4]">Shoulder + Neck Width</span> equals your <span className="text-[#5EEAD4]">Armhole Size</span>. If you change one, you must balance the others to keep the armhole from shifting.
+                  All calculations are balanced so the <span className="text-[#5EEAD4]">Total Shoulder Span</span> perfectly matches the <span className="text-[#5EEAD4]">Armhole Size</span>. This ensures the blouse sits flat without shoulder drooping or armhole tightness.
                 </p>
               </div>
             </div>
@@ -318,10 +304,10 @@ const App: React.FC = () => {
             <div className="p-8 bg-[#7A1F2B] rounded-[2.5rem] shadow-xl text-white">
               <div className="flex items-center space-x-3 mb-4">
                 <Share2 size={24} />
-                <h3 className="font-black uppercase tracking-widest text-lg italic">The Golden Rule</h3>
+                <h3 className="font-black uppercase tracking-widest text-lg italic">The Boutique Secret</h3>
               </div>
               <p className="text-xs font-bold leading-relaxed opacity-90 uppercase tracking-tight">
-                Total Shoulder Span (Neck + Shoulder) should match your Armhole depth for a balanced blouse. If you narrow the shoulder, widen the neck or deepen the armhole to compensate.
+                This app uses the standardized master formulas used by professional boutiques. When drafting on cloth, always place the 'Fold' measurements starting from the folded edge of your fabric.
               </p>
             </div>
           </div>
