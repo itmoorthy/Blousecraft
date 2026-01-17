@@ -6,6 +6,7 @@ export interface BlouseMeasurements {
   backNeckDepth: number;
   neckWidth: number;
   shoulderWidth: number;
+  totalShoulder: number; // NW + SW
   sleeveLength: number;
   dartSize: number;
   seamMargin: number;

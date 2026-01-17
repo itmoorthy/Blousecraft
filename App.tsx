@@ -12,19 +12,17 @@ import {
   CircleDashed,
   Menu,
   Calculator,
-  Layers,
   MoveHorizontal,
   Shrink,
-  Target,
   ArrowLeftRight,
   ArrowDown,
   Download,
   AlertCircle,
   Smartphone,
-  ShieldAlert,
   Copy,
   Check,
-  Share2
+  Share2,
+  Zap
 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -70,6 +68,8 @@ const App: React.FC = () => {
       setBustSize(value);
     }
   };
+
+  const isBalanced = measurements.totalShoulder === measurements.armhole;
 
   return (
     <div className="min-h-screen bg-[#90F5C8] text-[#042F2E] pb-10 font-['Inter'] selection:bg-[#042F2E] selection:text-[#90F5C8]">
@@ -188,7 +188,7 @@ const App: React.FC = () => {
               <div className="bg-[#0F3D3E] p-7 rounded-[2.5rem] shadow-2xl border-2 border-[#5EEAD4]/20">
                 <div className="flex items-center space-x-2 mb-6 text-[#5EEAD4]">
                   <Calculator size={20} />
-                  <h2 className="text-[11px] font-black uppercase tracking-[0.2em]">Measurement Input</h2>
+                  <h2 className="text-[11px] font-black uppercase tracking-[0.2em]">Bust Input</h2>
                 </div>
 
                 <div>
@@ -216,25 +216,39 @@ const App: React.FC = () => {
             <div className="lg:col-span-8">
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-2xl font-black text-[#042F2E] uppercase tracking-tighter italic">Stitching Guide</h2>
-                <div className="flex items-center space-x-2 bg-[#7A1F2B] text-white px-4 py-2 rounded-full shadow-lg border border-white/10">
-                  <CheckCircle2 size={14} />
-                  <span className="text-[10px] font-black uppercase tracking-widest">Master Fit</span>
+                <div className={`flex items-center space-x-2 px-4 py-2 rounded-full shadow-lg border border-white/10 transition-colors ${isBalanced ? 'bg-green-600 text-white' : 'bg-amber-500 text-[#042F2E]'}`}>
+                  {isBalanced ? <CheckCircle2 size={14} /> : <Zap size={14} />}
+                  <span className="text-[10px] font-black uppercase tracking-widest">
+                    {isBalanced ? 'Balanced Fit' : 'Custom Tweak'}
+                  </span>
                 </div>
               </div>
 
               {measurements.bustSize > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <MeasurementCard 
-                    label="Armhole Curve" 
+                    label="Total Shoulder Span" 
+                    value={measurements.totalShoulder} 
+                    icon={<Ruler size={20} />} 
+                    description="NW + SW"
+                  />
+                  <MeasurementCard 
+                    label="Armhole Size" 
                     value={measurements.armhole} 
                     icon={<CircleDashed size={20} />} 
                     description="(B / 8) + 1"
                   />
                   <MeasurementCard 
-                    label="Shoulder Width" 
+                    label="Shoulder (Fold)" 
                     value={measurements.shoulderWidth} 
                     icon={<MoveHorizontal size={20} />} 
                     description="B / 12"
+                  />
+                  <MeasurementCard 
+                    label="Neck Width (Fold)" 
+                    value={measurements.neckWidth} 
+                    icon={<Menu size={20} className="rotate-90" />} 
+                    description="(B / 18) + 0.5"
                   />
                   <MeasurementCard 
                     label="Apex Span (Fold)" 
@@ -260,18 +274,6 @@ const App: React.FC = () => {
                     icon={<ChevronRight size={20} className="rotate-90" />} 
                     description="(B / 12) + 6"
                   />
-                  <MeasurementCard 
-                    label="Neck Width" 
-                    value={measurements.neckWidth} 
-                    icon={<Menu size={20} className="rotate-90" />} 
-                    description="(B / 18) + 0.5"
-                  />
-                  <MeasurementCard 
-                    label="Dart Width" 
-                    value={measurements.dartSize} 
-                    icon={<Shrink size={20} />} 
-                    description="B / 24"
-                  />
                 </div>
               ) : (
                 <div className="h-64 bg-[#0F3D3E]/5 border-4 border-dashed border-[#0F3D3E]/20 rounded-[3rem] flex flex-col items-center justify-center text-[#042F2E]">
@@ -283,10 +285,10 @@ const App: React.FC = () => {
               <div className="mt-8 p-6 bg-[#042F2E] rounded-3xl border-l-4 border-[#7A1F2B] shadow-2xl">
                 <h4 className="text-[#5EEAD4] font-black text-[10px] uppercase tracking-widest mb-2 flex items-center">
                   <Info size={14} className="mr-2" />
-                  Technical Advisory
+                  Master Tailor Relationship
                 </h4>
                 <p className="text-[#E6FFFA] text-[10px] leading-relaxed font-bold uppercase tracking-tight">
-                  All horizontal measurements (Apex Span, Shoulder, Neck Width) reflect the folded fabric width. Drafting at 0.25" intervals for master tailoring.
+                  In this formula, your <span className="text-[#5EEAD4]">Shoulder + Neck Width</span> equals your <span className="text-[#5EEAD4]">Armhole Size</span>. If you change one, you must balance the others to keep the armhole from shifting.
                 </p>
               </div>
             </div>
@@ -316,10 +318,10 @@ const App: React.FC = () => {
             <div className="p-8 bg-[#7A1F2B] rounded-[2.5rem] shadow-xl text-white">
               <div className="flex items-center space-x-3 mb-4">
                 <Share2 size={24} />
-                <h3 className="font-black uppercase tracking-widest text-lg italic">Master Tailor Tips</h3>
+                <h3 className="font-black uppercase tracking-widest text-lg italic">The Golden Rule</h3>
               </div>
               <p className="text-xs font-bold leading-relaxed opacity-90 uppercase tracking-tight">
-                This app uses the 'Golden Ratio' for Indian blouses. When cutting on folded fabric, always use the 'Fold' measurements directly on the cloth without dividing them further.
+                Total Shoulder Span (Neck + Shoulder) should match your Armhole depth for a balanced blouse. If you narrow the shoulder, widen the neck or deepen the armhole to compensate.
               </p>
             </div>
           </div>
