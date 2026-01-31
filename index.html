@@ -12,7 +12,9 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
+    <!-- Tailwind CSS (Play CDN - Functional for GitHub Pages) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
@@ -41,10 +43,21 @@
 </head>
 <body>
     <div id="root"></div>
+    
+    <!-- 
+      IMPORTANT: This tag is required to boot the application.
+      Note: If deploying to GitHub Pages without a build tool, 
+      ensure your environment supports transpiling .tsx in the browser.
+    -->
+    <script type="module" src="./index.tsx"></script>
+
     <script>
+      // Service Worker Registration with relative pathing
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW reg failed:', err));
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('BlouseCraft Service Worker Active'))
+            .catch(err => console.log('SW registration failed:', err));
         });
       }
     </script>

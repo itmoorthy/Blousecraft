@@ -20,7 +20,8 @@ import {
   Smartphone,
   Copy,
   Check,
-  Share2
+  Share2,
+  ExternalLink
 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -40,7 +41,11 @@ const App: React.FC = () => {
   }, []);
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
+    // Logic to strip 'blob:' if present, as PWA installation requires standard https
+    let rawUrl = window.location.href;
+    const cleanUrl = rawUrl.replace(/^blob:/, '');
+    
+    navigator.clipboard.writeText(cleanUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -67,6 +72,8 @@ const App: React.FC = () => {
     }
   };
 
+  const isBlobUrl = window.location.href.startsWith('blob:');
+
   return (
     <div className="min-h-screen bg-[#d7ffed] text-[#042F2E] pb-10 font-['Inter'] selection:bg-[#042F2E] selection:text-[#d7ffed]">
       {/* Installation Guide Modal */}
@@ -85,35 +92,46 @@ const App: React.FC = () => {
             </h3>
             
             <div className="space-y-4">
-              <div className="p-4 bg-[#7A1F2B] rounded-2xl border border-white/20">
-                <p className="text-[10px] font-black uppercase tracking-widest flex items-center mb-1">
-                  <AlertCircle size={14} className="mr-2" /> Installation Steps
+              {isBlobUrl && (
+                <div className="p-4 bg-amber-500/10 rounded-2xl border border-amber-500/30">
+                  <p className="text-[10px] font-black uppercase tracking-widest flex items-center mb-1 text-amber-400">
+                    <AlertCircle size={14} className="mr-2" /> Preview Mode Detected
+                  </p>
+                  <p className="text-[11px] font-bold leading-tight text-white/90 uppercase">
+                    You are in a "Blob" preview. PWA installation is only supported on live hosted websites (HTTPS).
+                  </p>
+                </div>
+              )}
+
+              <div className="p-4 bg-[#042F2E] rounded-2xl border border-white/10">
+                <p className="text-[10px] font-black uppercase tracking-widest flex items-center mb-2 text-[#5EEAD4]">
+                  <ExternalLink size={14} className="mr-2" /> To Install:
                 </p>
-                <p className="text-[11px] font-bold leading-tight opacity-90 uppercase">
-                  Follow these steps to install BlouseCraft as a standalone app on your phone.
-                </p>
+                <ol className="text-[11px] font-bold uppercase space-y-2 opacity-80">
+                  <li>1. Host this on a site like Vercel or GitHub</li>
+                  <li>2. Open the live URL in Chrome</li>
+                  <li>3. Tap "Add to Home Screen"</li>
+                </ol>
               </div>
 
-              <div className="space-y-3">
-                <button 
-                  onClick={handleCopyLink}
-                  className="w-full flex items-center justify-between bg-[#042F2E] p-4 rounded-2xl border border-[#5EEAD4]/30 active:scale-95 transition-all"
-                >
-                  <div className="flex items-center space-x-3">
-                    {copied ? <Check size={18} className="text-green-400" /> : <Copy size={18} className="text-[#5EEAD4]" />}
-                    <span className="text-[10px] font-black uppercase tracking-widest">
-                      {copied ? 'Link Copied!' : '1. Copy Shared URL'}
-                    </span>
-                  </div>
-                </button>
-              </div>
+              <button 
+                onClick={handleCopyLink}
+                className="w-full flex items-center justify-between bg-[#5EEAD4] p-4 rounded-2xl active:scale-95 transition-all text-[#042F2E]"
+              >
+                <div className="flex items-center space-x-3">
+                  {copied ? <Check size={18} /> : <Copy size={18} />}
+                  <span className="text-[10px] font-black uppercase tracking-widest">
+                    {copied ? 'Link Copied!' : 'Copy Clean URL'}
+                  </span>
+                </div>
+              </button>
             </div>
 
             <button 
               onClick={() => setShowInstallGuide(false)}
-              className="w-full mt-8 py-5 bg-[#5EEAD4] text-[#042F2E] rounded-[1.5rem] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all text-sm"
+              className="w-full mt-8 py-5 bg-white/10 hover:bg-white/20 text-white rounded-[1.5rem] font-black uppercase tracking-widest transition-all text-sm"
             >
-              Close Guide
+              Close
             </button>
           </div>
         </div>
