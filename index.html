@@ -9,13 +9,12 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    
-    <!-- Tailwind CSS (Play CDN - Functional for GitHub Pages) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    <link rel="manifest" href="./manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CDN for prototyping; production builds typically use compiled CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -33,10 +32,12 @@
 <script type="importmap">
 {
   "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "vite": "https://esm.sh/vite@^7.3.1"
   }
 }
 </script>
@@ -44,20 +45,15 @@
 <body>
     <div id="root"></div>
     
-    <!-- 
-      IMPORTANT: This tag is required to boot the application.
-      Note: If deploying to GitHub Pages without a build tool, 
-      ensure your environment supports transpiling .tsx in the browser.
-    -->
+    <!-- Standard module entry point -->
     <script type="module" src="./index.tsx"></script>
 
     <script>
-      // Service Worker Registration with relative pathing
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('./sw.js')
             .then(reg => console.log('BlouseCraft Service Worker Active'))
-            .catch(err => console.log('SW registration failed:', err));
+            .catch(err => console.error('SW registration failed:', err));
         });
       }
     </script>

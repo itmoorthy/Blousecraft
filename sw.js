@@ -1,19 +1,18 @@
 
-const CACHE_NAME = 'blousecraft-v10';
+const CACHE_NAME = 'blousecraft-v12';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  'https://cdn.tailwindcss.com',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap',
+  'https://cdn.tailwindcss.com'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      // Use individual additions to prevent one failing URL from breaking the whole cache
       return Promise.allSettled(
-        ASSETS.map(url => cache.add(url).catch(err => console.warn('Failed to cache:', url, err)))
+        ASSETS.map(url => cache.add(url).catch(err => console.warn('Cache add failed:', url)))
       );
     })
   );
@@ -39,10 +38,9 @@ self.addEventListener('fetch', (event) => {
       if (cachedResponse) return cachedResponse;
       
       return fetch(event.request).then((response) => {
-        // Cache valid responses from our own origin or trusted CDNs
         const isInternal = response.type === 'basic';
-        const isCDN = response.url.includes('tailwindcss.com') || response.url.includes('fonts.googleapis.com');
-        
+        const isCDN = response.url.includes('tailwindcss') || response.url.includes('fonts');
+
         if (response.status === 200 && (isInternal || isCDN)) {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -52,7 +50,6 @@ self.addEventListener('fetch', (event) => {
 
         return response;
       }).catch(() => {
-        // Fallback for navigation requests when offline
         if (event.request.mode === 'navigate') {
           return caches.match('./index.html');
         }
